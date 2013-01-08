@@ -5,9 +5,9 @@ Sidekiq::Isochronal gives you a sophisticated scheduling facility for Sidekiq jo
 ## Installation
 
 Add this line to your application's Gemfile:
-
-    gem 'sidekiq-isochronal'
-
+```ruby
+gem 'sidekiq-isochronal'
+```
 And then execute:
 
     $ bundle

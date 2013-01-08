@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Sidekiq::Isochronal::ChronoJob, redis: true do
+  let(:chrono) { Sidekiq::Isochronal::ChronoJob }
   before :each do
     @job = Sidekiq::Isochronal::ChronoJob.create!("Worker", 5)
   end
@@ -33,7 +34,29 @@ describe Sidekiq::Isochronal::ChronoJob, redis: true do
       @job.runnable?.should be_true
     end
     
-    it "should not be locked unless running" do
+    context "with unique set" do
+      before :each do
+        @job = Sidekiq::Isochronal::ChronoJob.create!("Worker", 5, true)
+      end
+      
+      it "should acquire a lock for a worker class" do
+        lock = chrono.lock_for("Worker")
+        lock.should be_a(Sidekiq::Isochronal::Lock)
+      end
     end
   end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+

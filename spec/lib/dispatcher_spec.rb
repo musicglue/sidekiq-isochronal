@@ -7,11 +7,11 @@ describe Sidekiq::Isochronal::Dispatcher do
     subject(:dispatcher) { Sidekiq::Isochronal::Dispatcher }
     before :each do
       stub_class("Worker")
-      Worker.stub(:perform_async)
+      Worker.stubs(:perform_async)
     end
     
     it "with .run!" do
-      Worker.should_receive(:perform_async)
+      Worker.expects(:perform_async)
       dispatcher.run!("Worker")
     end
     

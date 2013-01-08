@@ -1,8 +1,10 @@
 require 'active_support/concern'
+require 'sidekiq/isochronal/lock'
 require 'sidekiq/isochronal/worker'
 require 'sidekiq/isochronal/chrono_job'
 require 'sidekiq/isochronal/chronograph'
 require 'sidekiq/isochronal/dispatcher'
+require 'sidekiq/isochronal/middleware'
 
 module Sidekiq
   module Isochronal

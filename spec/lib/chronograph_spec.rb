@@ -1,17 +1,13 @@
 require 'spec_helper'
 
 describe Sidekiq::Isochronal::Chronograph do
-  
-  before do
-    rspec_reset
-  end
-  
+
   context "stores and triggers jobs for Worker classes" do
     subject(:chronograph) { Sidekiq::Isochronal::Chronograph.new }
     
     before :each do
       @worker = stub_class("Worker")
-      Worker.stub(:perform_async)
+      Worker.stubs(:perform_async)
       Sidekiq::Isochronal::Chronograph.reset_jobs
     end
     
@@ -46,13 +42,13 @@ describe Sidekiq::Isochronal::Chronograph do
     
     it "should #dispatch a job" do
       chronograph.push "Worker", 1
-      Worker.should_receive(:perform_async)
+      Worker.expects(:perform_async)
       chronograph.dispatch      
     end
     
     it "should trigger requested workers" do
       chronograph.push "Worker", 1
-      Worker.should_receive(:perform_async)
+      Worker.expects(:perform_async)
       chronograph.execute
       chronograph.running?.should be_true
       sleep 2

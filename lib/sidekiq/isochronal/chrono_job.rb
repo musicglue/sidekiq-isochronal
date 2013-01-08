@@ -2,6 +2,29 @@ module Sidekiq
   module Isochronal
     class ChronoJob
       
+      class << self
+        def create! worker_class, interval, unique=false
+          item = new(worker_class, interval, unique)
+          item.register!
+          return item
+        end
+        
+        def load_job worker_class
+          id, hash = Digest::MD5.hexdigest(worker_class), {}
+          Sidekiq.redis { |conn| hash = conn.hgetall "chronojob:#{id}" }
+          return hash
+        end
+        
+        def runnable
+        end
+        
+        def lock_for worker_class
+          args = load_job(worker_class)
+          worker = new(args["worker_class"], args["interval"], args["unique"]).tap{|obj| obj.last_run = args["last_run"]}
+          Lock.new(worker)
+        end
+      end
+      
       attr_accessor :id, :worker_class, :interval, :unique, :last_run
       
       def initialize worker_class, interval, unique=false
@@ -20,23 +43,30 @@ module Sidekiq
         Sidekiq.redis { |conn| conn.hgetall("chronojob:#{id}") }
       end
       
+      def run
+        lock if unique
+      end
+      
+      def finish
+        unlock if unique
+      end
+      
+      def locked?
+        Sidekiq.redis { |conn| conn.exists "chronojob:lock:#{id}" }
+      end
+      
+      def unlocked?
+        !locked?
+      end
+      
       def runnable?
         if unique
-          
+          locked?
         else
           true
         end
       end
-      
-      
-      class << self
-        def create! worker_class, interval, unique=false
-          item = new(worker_class, interval, unique)
-          item.register!
-          return item
-        end
-      end
-      
+
     end
   end
 end

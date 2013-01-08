@@ -10,6 +10,8 @@ group :test do
   gem 'spork'
   gem 'faker'
   gem 'factory_girl'
+  gem 'mocha'
+  gem 'fuubar'
 end
 
 group :development do
@@ -17,6 +19,7 @@ group :development do
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-bundler'
+  gem 'guard-sidekiq'
   gem 'guard-spork'
   gem 'rb-inotify', :require => false
   gem 'rb-fsevent', :require => false
