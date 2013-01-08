@@ -1,12 +1,12 @@
-# Sidekiq::OrganGun
+# Sidekiq::Isochronal
 
-TODO: Write a gem description
+Sidekiq::Isochronal gives you a sophisticated scheduling facility for Sidekiq jobs. Or, it will do.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'sidekiq-organ_gun'
+    gem 'sidekiq-isochronal'
 
 And then execute:
 
@@ -14,11 +14,11 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install sidekiq-organ_gun
+    $ gem install sidekiq-isochronal
 
 ## Usage
 
-TODO: Write usage instructions here
+Once it is in your ```Gemfile``` then you have access to a new ```.periodicly``` method in your workers.
 
 ## Contributing
 
