@@ -63,7 +63,7 @@ describe Sidekiq::Isochronal::Lock, redis: true do
     
     it "should automatically release the lock" do
       lock.lock!
-      sleep 1
+      sleep 1.1
       lock.lock!.should be_true
     end
     
