@@ -33,12 +33,14 @@ describe Sidekiq::Middleware::Server::Chronograph, redis: true do
     end
     
     it "should acquire a lock with a unique worker" do
-      3.times do
+      2.times do
         LockingWorker.perform_async
       end
-      LockingWorker.drain
       
-      redis_result("get", "locktest").should eq("1")
+      LockingWorker.drain
+      time1 = redis_result("get", "locktest1").to_f
+      time2 = redis_result("get", "locktest2").to_f
+      time2.should be >= time1 + 0.2.seconds
     end
     
   end

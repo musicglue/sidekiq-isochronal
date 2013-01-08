@@ -24,10 +24,11 @@ module Sidekiq
         !lock_status.first
       end
       
-      def with_lock &block
-        lock!
-        yield
-        unlock!
+      def with_lock opts={}, &block
+        if lock!
+          yield
+          unlock!
+        end
       end
       
      
@@ -59,7 +60,6 @@ module Sidekiq
         end
       end
         
-      
     end
   end
 end

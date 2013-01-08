@@ -12,7 +12,7 @@ guard :spork do
   watch('spec/spec_helper.rb') { :rspec }
 end
 
-guard :sidekiq, :environment => 'test', :require => "./spec/support/load_workers.rb" do
+guard :sidekiq, :environment => 'test', :require => "./spec/support/load_workers.rb", :concurrency => 2 do
   watch(%r{^spec/support/workers/(.+)\.rb})
   watch(%r{^spec/support/load_workers.rb})
 end

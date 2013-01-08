@@ -6,7 +6,7 @@ require 'rspec'
 require 'mocha/api'
 
 Spork.prefork do
-  require 'factory_girl'
+  # require 'factory_girl'
   require 'faker'
   require 'celluloid'
   require 'sidekiq'
@@ -20,7 +20,7 @@ Spork.prefork do
   end
 
   RSpec.configure do |config|
-    config.include FactoryGirl::Syntax::Methods
+    # config.include FactoryGirl::Syntax::Methods
     config.mock_with :mocha
     
     config.around(:each, redis: true) do |spec|
@@ -33,5 +33,5 @@ end
 Spork.each_run do
   load File.expand_path('../../lib/sidekiq/isochronal.rb', __FILE__)
   Dir[File.expand_path('../../lib/sidekiq/isochronal', __FILE__)+'/*.rb'].each{ |file| load file }
-  FactoryGirl.find_definitions
+  # FactoryGirl.find_definitions
 end

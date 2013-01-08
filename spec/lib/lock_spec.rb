@@ -49,6 +49,15 @@ describe Sidekiq::Isochronal::Lock, redis: true do
     end
   end
   
+  it "should not acquire a lock if the resource is locked" do
+    lock.lock!
+    @var = nil
+    lock.with_lock do
+      @var = "broken"
+    end
+    @var.should be_nil
+  end
+  
   context "timeouts" do
     subject(:lock) { Sidekiq::Isochronal::Lock.new(job, 1) }
     
@@ -56,6 +65,15 @@ describe Sidekiq::Isochronal::Lock, redis: true do
       lock.lock!
       sleep 1
       lock.lock!.should be_true
+    end
+    
+    xit "#with_lock should allow retries of the lock" do
+      lock.lock!
+      @var = "broken"
+      lock.with_lock(retries: 3) do
+        @var = "working"
+      end
+      @var.should eq("working")
     end
   end
   
